@@ -95,11 +95,14 @@ def remove_user(db: Session, user_id: int):
         raise HTTPException(status_code=500, detail="An error occurred while deleting user")
 
 
+from sqlalchemy import func
+
 def get_users_by_nationality(db: Session, nationality: str) -> List[User]:
     try:
-        users = db.query(User).filter(User.nationality == nationality).all()
+        nationality_normalized = nationality.capitalize()
+        users = db.query(User).filter(func.lower(User.nationality) == func.lower(nationality_normalized)).all()
         if not users:
-            raise HTTPException(status_code=404, detail=f"No users found with nationality {nationality}")
+            raise HTTPException(status_code=404, detail=f"No users found with nationality {nationality_normalized}")
         return users
     except Exception as e:
         raise HTTPException(status_code=500, detail="An error occurred while fetching users by nationality: " + str(e))
