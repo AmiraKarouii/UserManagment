@@ -1,9 +1,10 @@
+from typing import List
+
 from sqlalchemy.orm import Session
 from models.User import User
 from schemas.schemas import UserSchema, Response
 from sqlalchemy.exc import IntegrityError
 from fastapi import HTTPException
-
 
 def get_User(db: Session):
     try:
@@ -23,7 +24,6 @@ def get_user_by_id(db: Session, user_id: int):
     except Exception as e:
         # Log the error or perform any other necessary actions
         raise HTTPException(status_code=500, detail="An error occurred while fetching user by ID: " + str(e))
-
 
 def create_user(db: Session, user: UserSchema):
     try:
@@ -95,5 +95,11 @@ def remove_user(db: Session, user_id: int):
         raise HTTPException(status_code=500, detail="An error occurred while deleting user")
 
 
-
-
+def get_users_by_nationality(db: Session, nationality: str) -> List[User]:
+    try:
+        users = db.query(User).filter(User.nationality == nationality).all()
+        if not users:
+            raise HTTPException(status_code=404, detail=f"No users found with nationality {nationality}")
+        return users
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="An error occurred while fetching users by nationality: " + str(e))

@@ -37,3 +37,8 @@ async def update_user(user_id: int, request: RequestUser, db: Session = Depends(
 async def delete_user(user_id: int,  db: Session = Depends(get_db)):
     crud.remove_user(db, user_id=user_id)
     return "Success delete user"
+
+@router.get("/users/{nationality}")
+async def get_users_by_nationality_endpoint(nationality: str, db: Session = Depends(get_db)):
+    users = crud.get_users_by_nationality(db, nationality)
+    return users
