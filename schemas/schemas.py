@@ -32,16 +32,14 @@ class UserSchema(BaseModel):
     class Config:
         orm_mode = True
 
-
-
 class RequestUser(BaseModel):
     parameter: UserSchema = Field(...)
 
 
 class Response(GenericModel, Generic[T]):
-    code: str
-    status: str
-    message: str
+    code: Optional[str]
+    status: Optional[str]
+    message: Optional[str]
     result: Optional[T]
 
 
