@@ -3,7 +3,6 @@ from sqlalchemy import func
 from sqlalchemy.orm import Session
 from models.User import User
 from schemas.schemas import UserSchema, Response
-from sqlalchemy.exc import IntegrityError
 from fastapi import HTTPException
 
 def get_User(db: Session):
